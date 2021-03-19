@@ -8,12 +8,13 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <fmt/format.h>
 
 #include "exampleConfig.h"
 #include "example.h"
 
 /*
- * Simple main program that demontrates how access
+ * Simple main program that demonstrates how access
  * CMake definitions (here the version number) from source code.
  */
 int main() {
@@ -26,6 +27,10 @@ int main() {
             << "."
             << PROJECT_VERSION_TWEAK
             << std::endl;
+
+  std::string name = "World";
+  std::cout << fmt::format("Hello: {}!", name) << std::endl;
+
   std::system("cat ../LICENSE");
 
   // Bring in the dummy class from the example source,
