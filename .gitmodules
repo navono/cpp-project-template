@@ -4,4 +4,3 @@
 [submodule "external/seastar"]
 	path = external/seastar
 	url = https://github.com/scylladb/seastar
-	branch = seastar-20.05-branch

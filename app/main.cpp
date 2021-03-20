@@ -12,7 +12,7 @@
 
 #include <seastar/core/app-template.hh>
 #include <seastar/core/sharded.hh>
-#include <seastar/core/sstring.hh>
+#include <seastar/core/reactor.hh>
 
 // the speak service runs on every core (see `seastar::sharded<speak_service>`
 // below). when the `speak` method is invoked, it returns a message tagged with
@@ -26,7 +26,7 @@ public:
     seastar::sstring speak() {
         std::stringstream ss;
         ss << "msg: \"" << _msg << "\" from core "
-           << seastar::engine().cpu_id();
+           << seastar::this_shard_id();
         return ss.str();
     }
 
@@ -42,7 +42,7 @@ private:
  * Simple main program that demonstrates how access
  * CMake definitions (here the version number) from source code.
  */
-int main() {
+int main(int argc, char** argv) {
   seastar::sharded<speak_service> speak;
 
     seastar::app_template app;
@@ -62,7 +62,7 @@ int main() {
 
         return speak.start(msg).then([&speak] {
             // sharded<>::map will run the provided lambda on each core. in this
-            // case, the speak method of the service is invoked and the messaes
+            // case, the speak method of the service is invoked and the messages
             // from each core are printed to stdout.
             return speak.map([](auto s) { return s.speak(); })
               .then([](auto msgs) {
