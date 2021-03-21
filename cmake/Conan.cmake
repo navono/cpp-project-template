@@ -12,8 +12,10 @@ if (${CMAKE_BUILD_TYPE} STREQUAL Coverage)
   # make conan pass
   set(CMAKE_BUILD_TYPE Debug)
   conan_cmake_run(
-          CONANFILE
-          conanfile.txt
+          REQUIRES
+          ${CONAN_EXTRA_REQUIRES}
+          OPTIONS
+          ${CONAN_EXTRA_OPTIONS}
           BASIC_SETUP
           CMAKE_TARGETS
           BUILD
@@ -23,8 +25,10 @@ if (${CMAKE_BUILD_TYPE} STREQUAL Coverage)
   set(CMAKE_BUILD_TYPE Coverage)
 else()
   conan_cmake_run(
-          CONANFILE
-          conanfile.txt
+          REQUIRES
+          ${CONAN_EXTRA_REQUIRES}
+          OPTIONS
+          ${CONAN_EXTRA_OPTIONS}
           BASIC_SETUP
           CMAKE_TARGETS
           BUILD

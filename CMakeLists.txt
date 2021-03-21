@@ -32,6 +32,10 @@ include(Documentation)
 include(LTO)
 include(Misc)
 include(Warnings)
+
+# Set up some extra Conan dependencies based on our needs before loading Conan
+set(CONAN_EXTRA_REQUIRES fmt/7.0.3)
+set(CONAN_EXTRA_OPTIONS "")
 include(Conan)
 
 # Check for LTO support.
