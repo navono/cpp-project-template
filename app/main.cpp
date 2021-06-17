@@ -8,6 +8,10 @@
 
 #include <fmt/format.h>
 #include <folly/FBString.h>
+#include <folly/Format.h>
+#include <folly/Uri.h>
+#include <folly/executors/ThreadedExecutor.h>
+#include <folly/futures/Future.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
@@ -15,6 +19,13 @@
 
 #include "example.h"
 #include "exampleConfig.h"
+
+static void print_uri(const folly::fbstring& address) {
+  const folly::Uri uri(address);
+  const auto authority = folly::format("The authority from {} is {}",
+                                       uri.fbstr(), uri.authority());
+  std::cout << authority << std::endl;
+}
 
 /*
  * Simple main program that demonstrates how access
@@ -40,6 +51,14 @@ int main() {
   spdlog::get("console")->info(
       "loggers can be retrieved from a global "
       "registry using the spdlog::get(logger_name)");
+
+  folly::ThreadedExecutor executor;
+  folly::Promise<folly::fbstring> promise;
+  folly::Future<folly::fbstring> future =
+      promise.getSemiFuture().via(&executor);
+  folly::Future<folly::Unit> unit = std::move(future).thenValue(print_uri);
+  promise.setValue("https://conan.io/");
+  std::move(unit).get();
 
   // Bring in the dummy class from the example source,
   // just to show that it is accessible from main.cpp.

@@ -74,6 +74,17 @@ add_executable(main app/main.cpp)   # Name of exec. and location of file.
 target_link_libraries(main PRIVATE ${LIBRARY_NAME} PRIVATE CONAN_PKG::fmt CONAN_PKG::spdlog CONAN_PKG::folly)  # Link the executable to library (if it uses it).
 target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
 target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
+#target_compile_options(main PRIVATE "/WX-" )
+
+if (MSVC)
+    # disable warning as error
+    target_compile_options(main PRIVATE "/WX-" )
+    target_compile_options(${LIBRARY_NAME} PRIVATE "/WX-" )
+else()
+    # lots of warnings and all warnings as errors
+    target_compile_options(main PRIVATE "-Wall -Wextra -pedantic -Werror")
+    target_compile_options(${LIBRARY_NAME} PRIVATE "-Wall -Wextra -pedantic -Werror")
+endif()
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
