@@ -1,6 +1,6 @@
 #include "example.h"
 
-Dummy::Dummy() {}
+Dummy::Dummy() = default;
 
 bool Dummy::doSomething() {
   // Do silly things, using some C++17 features to enforce C++17 builds only.

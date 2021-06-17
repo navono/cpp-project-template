@@ -7,6 +7,7 @@
 #endif
 
 #include <fmt/format.h>
+#include <folly/FBString.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
@@ -24,8 +25,9 @@ int main() {
             << PROJECT_VERSION_MINOR << "." << PROJECT_VERSION_PATCH << "."
             << PROJECT_VERSION_TWEAK << std::endl;
 
-  std::string name = "World";
-  std::cout << fmt::format("Hello: {}!", name) << std::endl;
+  //  std::string name = "World";
+  folly::fbstring fs("World");
+  std::cout << fmt::format("Hello: {}!", fs.toStdString()) << std::endl;
 
   std::system("cat ../LICENSE");
 
@@ -41,6 +43,6 @@ int main() {
 
   // Bring in the dummy class from the example source,
   // just to show that it is accessible from main.cpp.
-  Dummy d = Dummy();
-  return d.doSomething() ? 0 : -1;
+  //  Dummy d = Dummy();
+  return Dummy::doSomething() ? 0 : -1;
 }

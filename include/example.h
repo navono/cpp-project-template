@@ -13,7 +13,7 @@ class Dummy {
    * Returns a bool.
    * @return Always True.
    */
-  bool doSomething();
+  static bool doSomething();
 };
 
 #ifdef ENABLE_DOCTEST_IN_LIBRARY
