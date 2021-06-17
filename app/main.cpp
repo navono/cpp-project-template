@@ -22,8 +22,7 @@
 
 static void print_uri(const folly::fbstring& address) {
   const folly::Uri uri(address);
-  const auto authority = folly::format("The authority from {} is {}",
-                                       uri.fbstr(), uri.authority());
+  const auto authority = folly::format("The authority from {} is {}", uri.fbstr(), uri.authority());
   std::cout << authority << std::endl;
 }
 
@@ -32,9 +31,8 @@ static void print_uri(const folly::fbstring& address) {
  * CMake definitions (here the version number) from source code.
  */
 int main() {
-  std::cout << "C++ Boiler Plate v" << PROJECT_VERSION_MAJOR << "."
-            << PROJECT_VERSION_MINOR << "." << PROJECT_VERSION_PATCH << "."
-            << PROJECT_VERSION_TWEAK << std::endl;
+  std::cout << "C++ Boiler Plate v" << PROJECT_VERSION_MAJOR << "." << PROJECT_VERSION_MINOR << "."
+            << PROJECT_VERSION_PATCH << "." << PROJECT_VERSION_TWEAK << std::endl;
 
   //  std::string name = "World";
   folly::fbstring fs("World");
@@ -49,13 +47,12 @@ int main() {
   auto console = spdlog::stdout_color_mt("console");
   auto err_logger = spdlog::stderr_color_mt("stderr");
   spdlog::get("console")->info(
-      "loggers can be retrieved from a global "
-      "registry using the spdlog::get(logger_name)");
+      "loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
 
   folly::ThreadedExecutor executor;
   folly::Promise<folly::fbstring> promise;
-  folly::Future<folly::fbstring> future =
-      promise.getSemiFuture().via(&executor);
+
+  folly::Future<folly::fbstring> future = promise.getSemiFuture().via(&executor);
   folly::Future<folly::Unit> unit = std::move(future).thenValue(print_uri);
   promise.setValue("https://conan.io/");
   std::move(unit).get();
