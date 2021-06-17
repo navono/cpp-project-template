@@ -19,6 +19,9 @@
 
 #include "example.h"
 #include "exampleConfig.h"
+#include "threadPool.h"
+
+#define USE_FOLLY 0
 
 static void print_uri(const folly::fbstring& address) {
   const folly::Uri uri(address);
@@ -46,8 +49,7 @@ int main() {
   // create color multi threaded logger
   auto console = spdlog::stdout_color_mt("console");
   auto err_logger = spdlog::stderr_color_mt("stderr");
-  spdlog::get("console")->info(
-      "loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
+  spdlog::get("console")->info("loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
 
   folly::ThreadedExecutor executor;
   folly::Promise<folly::fbstring> promise;
@@ -56,6 +58,8 @@ int main() {
   folly::Future<folly::Unit> unit = std::move(future).thenValue(print_uri);
   promise.setValue("https://conan.io/");
   std::move(unit).get();
+
+  thread_pool_verify(24, 10000, 100000);
 
   // Bring in the dummy class from the example source,
   // just to show that it is accessible from main.cpp.
